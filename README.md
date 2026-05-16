@@ -32,16 +32,35 @@ Plug in your guitar (or any monophonic instrument), and either tune up or run ti
 
 ## Installation
 
-1. Download the latest release zip from the [Releases page](https://github.com/dasaro/FretboardTrainer/releases/latest).
-2. Unzip it — you'll get `FretboardTrainer.app`.
-3. Drag `FretboardTrainer.app` to your `/Applications` folder.
-4. **First launch (Gatekeeper)**: this app is ad-hoc signed, not notarized by Apple. On first launch macOS will refuse to open it with an "unidentified developer" warning. To bypass:
-   - **Easy way**: right-click (or Control-click) `FretboardTrainer.app` in Finder → choose **Open** → click **Open** in the dialog. macOS remembers this choice for future launches.
-   - **Alternative**: open Terminal and run:
-     ```sh
-     xattr -d com.apple.quarantine /Applications/FretboardTrainer.app
-     ```
-5. The first time the app runs, macOS will ask for microphone access. Grant it.
+### Step 1 — Download and move to Applications
+
+1. Download **FretboardTrainer-x.y.z-arm64.zip** from the [Releases page](https://github.com/dasaro/FretboardTrainer/releases/latest).
+2. Unzip it.
+3. Drag **FretboardTrainer.app** into your **/Applications** folder.
+
+### Step 2 — Open it the first time
+
+> **You will hit a Gatekeeper warning. This is normal, and there are two clicks to get past it.** It happens because the app is signed locally rather than by Apple ($99/yr Developer Program); the code is the same code you can read in the repository.
+
+**The two-click way (recommended):**
+
+1. Open **/Applications** in Finder.
+2. **Right-click** (or hold Control and click) **FretboardTrainer.app** → choose **Open**.
+3. A dialog says it's from an unidentified developer. Click **Open** anyway.
+4. macOS will remember your decision — double-clicking works normally from now on.
+
+**The Terminal way (if the right-click flow doesn't show "Open"):**
+
+```sh
+xattr -d com.apple.quarantine /Applications/FretboardTrainer.app
+open /Applications/FretboardTrainer.app
+```
+
+This strips the quarantine flag macOS attached to the downloaded file.
+
+### Step 3 — Grant microphone access
+
+On the first launch, macOS will prompt for microphone access. Click **OK** — the app cannot detect notes without it. If you accidentally clicked **Don't Allow**, the app will show a red banner with an *Open Settings* button that takes you straight to the right panel.
 
 ## Usage
 
@@ -64,9 +83,20 @@ Plug in your guitar (or any monophonic instrument), and either tune up or run ti
 
 ### Keyboard shortcuts
 
-| Key       | Action                       |
-|-----------|------------------------------|
-| `Space`   | Start / Stop Listening       |
+| Key | Action |
+|-----|--------|
+| `⌘1` / `⌘2` / `⌘3` / `⌘4` | Switch to Tuner / Trainer / Find the Note / History |
+| `⌘N` | New Session |
+| `⌘.` | Stop Session |
+| `⌘→` | Skip current note |
+| `⌘L` or `Space` | Toggle Listening |
+| `⌘,` | Settings |
+| `⇧⌘⌫` | Reset Session History |
+| `⇧⌘/` | Show keyboard shortcuts |
+| `A`–`G` | Play natural note (in Find the Note, letter step) |
+| `⇧A`–`⇧G` | Play sharp note (`⇧C` = C#, etc.) |
+
+The same list is available in the app via **Help → Keyboard Shortcuts**.
 
 ## Troubleshooting
 
