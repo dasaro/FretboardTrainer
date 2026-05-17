@@ -2,6 +2,20 @@
 
 All notable changes to FretboardTrainer are documented here. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-05-18
+
+A focused release on practice quality and history visualization.
+
+### Added
+- **Adaptive note selection (opt-in)** — Settings → Practice → "Adaptive note selection" toggle. When enabled, the trainer biases its random selection toward notes you're slower on, using the SM-2 spaced-repetition algorithm. Each pitch class carries an Easiness Factor that updates after every hit; weaker notes (low EF) appear up to ~3.7× more often than mastered ones. Forward and reverse exercises maintain separate EF maps so the two skills don't bleed into each other. Off by default; uniform random when disabled.
+- **History chart X / Y axis selectors.** The History pane now lets you plot any of four Y metrics — **Notes per minute**, **Mean time per note (s)**, **Notes per session**, or **Note timing σ (s)** (consistency) — against either **Date** (chronological) or **Session #** (equally-spaced, collapses time gaps). Useful for asking different questions of the same data: "Am I getting faster?" vs. "Am I getting more consistent?" vs. "Did I take a week off?"
+
+### Changed
+- **History pane visual refresh.** Refactored the controls block into two aligned rows (data filters + chart axes) using a shared small-caps section label pattern that matches the existing heatmap header. Pickers now share a single `CompactPicker` view modifier so spacing and sizing are consistent across the pane. Continuous corner radii on the card and heatmap cells (the macOS "squircle"), session-count rendered as a Capsule badge.
+- **Heatmap colors softened** — saturation/opacity lowered so the green→red gradient reads as a tint rather than a web-style heatmap, and stroke width tightened from 1pt to 0.5pt.
+- **Training-type field cleaned up.** Removed the double-chevron visual glitch (two stacked indicators) and replaced the icon-only popup with a labeled `Recent` menu using an inline `Picker`, so macOS draws its native checkmark next to the currently-selected entry. Placeholder text now shows an example.
+- **Fretboard orientation flipped** to match standard tablature notation — high E on top, low E on bottom.
+
 ## [1.1.0] - 2026-05-17
 
 UX polish pass to make the app comfortable for non-technical users to install and operate.
@@ -48,5 +62,6 @@ First public release.
 - **Apple Silicon only.** No Intel build.
 - **Ad-hoc signed.** Not notarized; macOS Gatekeeper requires a right-click → Open on first launch, or an `xattr` quarantine removal (see README).
 
+[1.2.0]: https://github.com/dasaro/FretboardTrainer/releases/tag/v1.2.0
 [1.1.0]: https://github.com/dasaro/FretboardTrainer/releases/tag/v1.1.0
 [1.0.0]: https://github.com/dasaro/FretboardTrainer/releases/tag/v1.0.0
