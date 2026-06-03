@@ -2,6 +2,20 @@
 
 All notable changes to FretboardTrainer are documented here. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-06-03
+
+A release focused on a new speed drill and much smarter wrong-note handling.
+
+### Added
+- **Open Strings exercise.** A pure string-skipping speed drill: one open string (E A D G B E) is named at a time and you race to pluck it. Matching is octave-aware, so a "high E" prompt (E4, 1st string) isn't satisfied by ringing the low E (E2, 6th) — implemented via an optional per-exercise octave constraint with ±1 tolerance to absorb single-octave detector wobble. Adaptive selection (keyed on string number) and full history tracking work like the other modes. Switch to it with ⌘7.
+- **Per-session wrong-note counting.** Each session now tallies wrong notes and surfaces the count live during the run and on the result card. A matching **"Wrong notes per session"** Y-axis was added to the History chart.
+- **"Show detected note" with a distance gradient.** With the Settings → Practice toggle on, the live "Heard: X" readout is tinted on a green→red gradient by the circular semitone distance from the target, giving instant feedback on *how* far off a played note is rather than just whether it matched.
+- **History distinguishes Adaptive vs Uniform sessions.** Each session records whether adaptive selection was active, and the chart encodes the two modes by both colour and shape (with a legend), so their not-directly-comparable NPM numbers are never conflated. The stats line also breaks down the split when both are present. Pre-existing records default to Uniform.
+
+### Changed
+- **Wrong-note detection is far more robust.** Wrong notes are only counted after a fresh envelope-based onset, so sustained ring-out and low-level noise (fan hum, mic bumps, decaying strings) no longer register. The decay of your *previous* correct note is additionally suppressed for ~1.5 s so its tail isn't charged as a new mistake. Octave mismatches in Open Strings are a gentle no-op rather than a logged error.
+- **Intervals — clearer two-step cue.** In "play root, then the interval" mode, landing the root now plays a soft confirmation and flashes the root green so you know it's time to play the target.
+
 ## [1.2.0] - 2026-05-18
 
 A focused release on practice quality and history visualization.
@@ -62,6 +76,7 @@ First public release.
 - **Apple Silicon only.** No Intel build.
 - **Ad-hoc signed.** Not notarized; macOS Gatekeeper requires a right-click → Open on first launch, or an `xattr` quarantine removal (see README).
 
+[1.3.0]: https://github.com/dasaro/FretboardTrainer/releases/tag/v1.3.0
 [1.2.0]: https://github.com/dasaro/FretboardTrainer/releases/tag/v1.2.0
 [1.1.0]: https://github.com/dasaro/FretboardTrainer/releases/tag/v1.1.0
 [1.0.0]: https://github.com/dasaro/FretboardTrainer/releases/tag/v1.0.0
