@@ -4,9 +4,9 @@
 
 # Fretboard Trainer
 
-**A chromatic tuner and ear-training game for macOS.**
+**A chromatic tuner and ear/fretboard-training game for macOS.**
 
-Plug in your guitar (or any monophonic instrument), and either tune up or run timed drills where the app randomly throws notes at you and times how fast you can play them.
+Plug in your guitar (or any monophonic instrument) and either tune up or run timed drills that train note recognition, intervals, scale degrees, and string-skipping — the app listens to what you play and times how fast you find each target.
 
 [![Latest release](https://img.shields.io/github/v/release/dasaro/FretboardTrainer?label=download&style=flat-square)](https://github.com/dasaro/FretboardTrainer/releases/latest)
 [![macOS](https://img.shields.io/badge/macOS-14%2B-blue?style=flat-square)](https://www.apple.com/macos/)
@@ -18,11 +18,26 @@ Plug in your guitar (or any monophonic instrument), and either tune up or run ti
 
 ## Features
 
-- **Tuner mode** — real-time pitch detection with cents-accurate tuning meter (50–2000 Hz range, ±1¢ resolution on a clean signal).
-- **Fretboard Trainer mode** — random pitch-class drills with selectable session lengths (1 / 3 / 5 / 10 min). The app waits for you to play the correct note, then advances. Wrong notes are simply ignored — no penalty, just play until you nail it.
-- **Performance metrics** — live countdown, notes hit, average time per note, and notes-per-minute (NPM). Best NPM per session length is saved across launches.
-- **Input device picker** — selectable input device with hot-swap. Works with built-in microphones, USB audio interfaces, and aggregate devices.
-- **YIN-based pitch detection** — 8192-sample analysis window with parabolic interpolation and clarity-based confidence gating. Monophonic only.
+### Tuner
+- **Real-time pitch detection** with a cents-accurate tuning meter (±1¢ resolution on a clean signal). The meter dot is **green** within ±5¢, **yellow** within ±15¢, **red** beyond.
+
+### Practice modes
+Every practice mode runs as a timed session (1 / 3 / 5 / 10 min) and reports notes hit, wrong notes, average time per note, and notes-per-minute (NPM). Best NPM per session length and training type is saved across launches.
+
+- **Trainer** — a random pitch class (C, C#, …, B) appears; play it on any string in any octave. Targets are shown as either spelling (e.g. "C#" or "Db") and either is accepted.
+- **Find the Note** — a fretboard position is shown; play it. An optional naming step then asks you to click/type the letter to reinforce recall.
+- **Intervals** — play the named interval above a root. An optional extended mode walks root → interval → name, with a confirmation cue the moment the root lands.
+- **Scale Degrees** — play a scale degree (2–7, major and/or minor) above a tonic, with the same optional play-tonic-then-name flow.
+- **Note on String** — find a target note on a specific string, with an open-string verification step. Can be locked to a single string for focused drilling.
+- **Open Strings** — a pure string-skipping speed drill. One open string (E A D G B E) is named at a time; pluck it as fast as you can. Octave-aware, so a "high E" prompt isn't satisfied by ringing the low E.
+
+### Across all modes
+- **Adaptive note selection (opt-in)** — Settings → Practice. Biases random selection toward the notes/intervals/strings you're slowest at, using the SM-2 spaced-repetition algorithm. Each exercise keeps its own per-training-type difficulty map. Off by default (uniform random).
+- **Show detected note (opt-in)** — a small "Heard: X" line under the prompt, tinted on a **green→red gradient** by how far the detected pitch is from the target, so you can see *how* off you are at a glance.
+- **Wrong-note counting** — each session tallies wrong notes, with onset gating and decay suppression so sustained ring-out and low-level noise don't get charged as mistakes.
+- **History pane** — plot any of five Y metrics (Notes per minute / Mean time per note / Notes per session / **Wrong notes per session** / Note timing σ) against Date or Session #, filtered by exercise, training type, and length. **Adaptive and Uniform sessions are distinguished by colour and shape** so their (not directly comparable) numbers never get conflated. A per-note heatmap colours each pitch class from green (fastest) to red (slowest).
+- **Input device picker** with hot-swap — built-in mics, USB interfaces, and aggregate devices.
+- **YIN-based pitch detection** — 8192-sample analysis window with parabolic interpolation and envelope-based onset detection. Monophonic only.
 
 ## Requirements
 
@@ -64,28 +79,27 @@ On the first launch, macOS will prompt for microphone access. Click **OK** — t
 
 ## Usage
 
-### Tuner mode
+### Tuner
 
 1. Click **Start Listening**.
 2. Pick your input device from the dropdown if needed.
-3. Play a note. The detected pitch, frequency in Hz, and a ±50 cents tuning meter appear. The meter dot is **green** within ±5¢, **yellow** within ±15¢, and **red** beyond.
+3. Play a note. The detected pitch, frequency in Hz, and a ±50 cents tuning meter appear.
 
-### Fretboard Trainer mode
+### Practice sessions
 
-1. Switch the mode picker to **Fretboard Trainer**.
+1. Pick a mode from the segmented control (Trainer, Find the Note, Intervals, Scale Degrees, Note on String, Open Strings).
 2. Click **Start Listening** if you haven't already.
-3. Pick a session length: **1**, **3**, **5**, or **10 min**.
-4. Click **Start Session**.
-5. A random pitch class (C, C#, …, B) appears. Play it on any string in any octave — when the app hears it, you advance to the next.
-6. After the timer runs out, you'll see your **notes per minute**, total notes, and average time. If you beat your previous best for that session length, a **NEW BEST** badge appears.
+3. Choose a session length (**1 / 3 / 5 / 10 min**) and, optionally, a training-type label so history groups related sessions together.
+4. Click **Start Session** and play each target as it appears. When the app hears the right note, you advance.
+5. When the timer ends you'll see your **notes per minute**, total notes, wrong notes, and average time. Beat your previous best for that mode + length and a **NEW BEST** badge appears.
 
-> Tip: the app gives you the benefit of the doubt. If you fumble or hit a wrong note while reaching for the target, it's silently ignored. Only the moment you play the correct pitch class counts.
+> Tip: the app gives you the benefit of the doubt. Fumbles and stray notes while reaching for the target are ignored — only playing the correct pitch advances you. Wrong notes are still *counted* (after a real pluck), but never block progress.
 
 ### Keyboard shortcuts
 
 | Key | Action |
 |-----|--------|
-| `⌘1` / `⌘2` / `⌘3` / `⌘4` | Switch to Tuner / Trainer / Find the Note / History |
+| `⌘1` … `⌘8` | Switch to Tuner / Trainer / Find the Note / Intervals / Scale Degrees / Note on String / Open Strings / History |
 | `⌘N` | New Session |
 | `⌘.` | Stop Session |
 | `⌘→` | Skip current note |
@@ -93,7 +107,7 @@ On the first launch, macOS will prompt for microphone access. Click **OK** — t
 | `⌘,` | Settings |
 | `⇧⌘⌫` | Reset Session History |
 | `⇧⌘/` | Show keyboard shortcuts |
-| `A`–`G` | Play natural note (in Find the Note, letter step) |
+| `A`–`G` | Play natural note (in letter-naming steps) |
 | `⇧A`–`⇧G` | Play sharp note (`⇧C` = C#, etc.) |
 
 The same list is available in the app via **Help → Keyboard Shortcuts**.
