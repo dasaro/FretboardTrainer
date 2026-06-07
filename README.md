@@ -6,7 +6,7 @@
 
 **A chromatic tuner and ear/fretboard-training game for macOS.**
 
-Plug in your guitar (or any monophonic instrument) and either tune up or run timed drills that train note recognition, intervals, scale degrees, and string-skipping — the app listens to what you play and times how fast you find each target.
+Plug in your guitar (or any monophonic instrument) and either tune up or run timed drills that train note recognition, intervals, scale degrees, chords, string-skipping, and the circle of fifths — the app listens to what you play and times how fast you find each target.
 
 [![Latest release](https://img.shields.io/github/v/release/dasaro/FretboardTrainer?label=download&style=flat-square)](https://github.com/dasaro/FretboardTrainer/releases/latest)
 [![macOS](https://img.shields.io/badge/macOS-14%2B-blue?style=flat-square)](https://www.apple.com/macos/)
@@ -28,16 +28,21 @@ Every practice mode runs as a timed session (1 / 3 / 5 / 10 min) and reports not
 - **Find the Note** — a fretboard position is shown; play it. An optional naming step then asks you to click/type the letter to reinforce recall.
 - **Intervals** — play the named interval above a root. An optional extended mode walks root → interval → name, with a confirmation cue the moment the root lands.
 - **Scale Degrees** — play a scale degree (2–7, major and/or minor) above a tonic, with the same optional play-tonic-then-name flow.
+- **Circle of 5ths** — active-recall practice of the circle: a key is shown and you retrieve and play the next position from memory — a fifth up (clockwise), a fourth up (counter-clockwise), or the relative minor. Random order by default (maximum retrieval); an optional ordered cycle (C → G → D → …) drills the sequence. Keys are spelled conventionally — Bb, Eb, Ab, Db, Gb on the flat side.
+- **Chord Builder** — find a seed note on a string, then build a triad or 7th chord *around* it, playing the remaining tones anywhere on the neck. Toggles: find-on-a-string first, let the anchor be any chord tone (so you work out the root), and name the notes at the end (each tone as you go, or all together).
 - **Note on String** — find a target note on a specific string, with an open-string verification step. Can be locked to a single string for focused drilling.
 - **Open Strings** — a pure string-skipping speed drill. One open string (E A D G B E) is named at a time; pluck it as fast as you can. Octave-aware, so a "high E" prompt isn't satisfied by ringing the low E.
 
 ### Across all modes
 - **Adaptive note selection (opt-in)** — Settings → Practice. Biases random selection toward the notes/intervals/strings you're slowest at, using the SM-2 spaced-repetition algorithm. Each exercise keeps its own per-training-type difficulty map. Off by default (uniform random).
 - **Show detected note (opt-in)** — a small "Heard: X" line under the prompt, tinted on a **green→red gradient** by how far the detected pitch is from the target, so you can see *how* off you are at a glance.
-- **Wrong-note counting** — each session tallies wrong notes, with onset gating and decay suppression so sustained ring-out and low-level noise don't get charged as mistakes.
-- **History pane** — plot any of five Y metrics (Notes per minute / Mean time per note / Notes per session / **Wrong notes per session** / Note timing σ) against Date or Session #, filtered by exercise, training type, and length. **Adaptive and Uniform sessions are distinguished by colour and shape** so their (not directly comparable) numbers never get conflated. A per-note heatmap colours each pitch class from green (fastest) to red (slowest).
+- **Wrong-note counting** — each session tallies wrong notes uniformly across every mode, with onset gating and decay suppression so sustained ring-out and low-level noise don't get charged as mistakes.
+- **History — Progress & Mastery.** *Progress* charts your trend over time (notes-per-minute plus four other metrics, against Date or Session #), with Adaptive and Uniform sessions distinguished by colour and shape. *Mastery* breaks each exercise down to the specific thing it trains — the interval, chord tone, scale degree, string, or circle relationship — as a weakest-first table with recent average time, miss rate, attempt count, and an improving/worsening trend arrow. Two questions, two views: *am I improving?* and *what am I weakest at right now?* (The Trainer even distinguishes enharmonic spellings — is "Eb" slower for you than "D#"?)
 - **Input device picker** with hot-swap — built-in mics, USB interfaces, and aggregate devices.
 - **YIN-based pitch detection** — 8192-sample analysis window with parabolic interpolation and envelope-based onset detection. Monophonic only.
+
+### Experimental
+- **Chord ID** (in the **View** menu, not the main picker) — a live readout that names the major/minor triad you're holding, via frequency-domain chroma analysis with harmonic suppression. Separate from the monophonic detector the exercises use; best on a clean DI signal. A confidence and "3rd-strength" meter flags the classic single-note-overtone false positive (a lone note's overtones spell its own major triad).
 
 ## Requirements
 
@@ -87,7 +92,7 @@ On the first launch, macOS will prompt for microphone access. Click **OK** — t
 
 ### Practice sessions
 
-1. Pick a mode from the segmented control (Trainer, Find the Note, Intervals, Scale Degrees, Note on String, Open Strings).
+1. Pick a mode from the segmented control (Trainer, Find the Note, Intervals, Scale Degrees, Circle of 5ths, Chord Builder, Note on String, Open Strings).
 2. Click **Start Listening** if you haven't already.
 3. Choose a session length (**1 / 3 / 5 / 10 min**) and, optionally, a training-type label so history groups related sessions together.
 4. Click **Start Session** and play each target as it appears. When the app hears the right note, you advance.
@@ -99,7 +104,7 @@ On the first launch, macOS will prompt for microphone access. Click **OK** — t
 
 | Key | Action |
 |-----|--------|
-| `⌘1` … `⌘8` | Switch to Tuner / Trainer / Find the Note / Intervals / Scale Degrees / Note on String / Open Strings / History |
+| `⌘1` … `⌘0` | Switch mode: Tuner / Trainer / Find the Note / Intervals / Scale Degrees / Circle of 5ths / Chord Builder / Note on String / Open Strings / History (`⌘0`) |
 | `⌘N` | New Session |
 | `⌘.` | Stop Session |
 | `⌘→` | Skip current note |
@@ -109,6 +114,8 @@ On the first launch, macOS will prompt for microphone access. Click **OK** — t
 | `⇧⌘/` | Show keyboard shortcuts |
 | `A`–`G` | Play natural note (in letter-naming steps) |
 | `⇧A`–`⇧G` | Play sharp note (`⇧C` = C#, etc.) |
+
+The experimental **Chord ID** mode has no accelerator — open it from the **View** menu.
 
 The same list is available in the app via **Help → Keyboard Shortcuts**.
 
