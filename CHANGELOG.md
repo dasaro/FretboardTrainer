@@ -2,6 +2,20 @@
 
 All notable changes to FretboardTrainer are documented here. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-06-07
+
+A big release: History is rebuilt around per-item mastery, two new exercises join the lineup, and an experimental polyphonic chord detector lands.
+
+### Added
+- **History, rebuilt as Progress + Mastery.** Every scored hit is now recorded as an attempt tagged with *the thing the drill actually trains* (the interval, chord tone, scale degree, string, or circle relationship), not just the resulting pitch class. Two views sit on top: **Progress** charts your trend over time (notes-per-minute and four other metrics, Date or Session #, Adaptive vs Uniform distinguished), and **Mastery** is a weakest-first per-item table — recent average time, miss rate, attempt count, and an improving/worsening trend arrow — so you can answer both "am I improving?" and "what am I weakest at right now?". Mastery data accrues from this version onward; the Progress chart keeps your full session history.
+- **Chord Builder exercise.** Find a seed note on a string, then construct a triad or 7th chord *around* it, playing the remaining tones anywhere on the neck. Toggles: find-on-a-string first (with open-string verification), let the anchor be any chord tone — root, 3rd, 5th, 7th — so you work out the root yourself, and name the notes at the end (inline after each tone, or all together in play order). Chord set selectable (Triads / Triads + 7th / Custom).
+- **Circle of 5ths exercise.** Active-recall practice of the circle — the most evidence-backed way to learn it. A key is shown and you retrieve and *play* the next position from memory: a fifth up (clockwise), a fourth up (counter-clockwise), or the relative minor. Random order by default (maximum retrieval demand); an optional ordered cycle (C → G → D → …) drills the sequence for muscle memory. Keys are spelled conventionally, with flats on the flat side (Bb, Eb, Ab, Db, Gb). SM-2 spacing surfaces the keys/relationships you recall slowest.
+- **Chord ID (experimental).** A live, read-only readout — in the **View** menu, not the main picker — that names the major/minor triad you're holding, via frequency-domain chroma analysis (FFT → 12-bin chroma → triad-template cost) with harmonic suppression. Independent of the monophonic detector the exercises use. A confidence and "3rd-strength" meter flags the classic single-note-overtone false positive.
+- **Enharmonic distinction in Mastery (Trainer).** The Trainer is the only mode that shows both spellings of a pitch class and asks you to find the one displayed, so its Mastery rows now separate "Eb" from "D#" — revealing which spelling is cognitively slower for you. Pitch matching and adaptive selection are unaffected.
+
+### Changed
+- **Wrong-note detection is now uniform across every mode.** Detection lives in a single, exercise-agnostic path driven only by the exercise protocol. A subtle divergence — where multi-step modes (open-string verification, the root before an interval, the chord anchor) could miscount a *correct* note's ring-out as wrong — was fixed by registering every correct match for decay suppression, scoring or not. All modes now behave identically.
+
 ## [1.3.0] - 2026-06-03
 
 A release focused on a new speed drill and much smarter wrong-note handling.
@@ -76,6 +90,7 @@ First public release.
 - **Apple Silicon only.** No Intel build.
 - **Ad-hoc signed.** Not notarized; macOS Gatekeeper requires a right-click → Open on first launch, or an `xattr` quarantine removal (see README).
 
+[1.4.0]: https://github.com/dasaro/FretboardTrainer/releases/tag/v1.4.0
 [1.3.0]: https://github.com/dasaro/FretboardTrainer/releases/tag/v1.3.0
 [1.2.0]: https://github.com/dasaro/FretboardTrainer/releases/tag/v1.2.0
 [1.1.0]: https://github.com/dasaro/FretboardTrainer/releases/tag/v1.1.0
