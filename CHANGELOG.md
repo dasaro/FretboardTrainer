@@ -2,6 +2,26 @@
 
 All notable changes to FretboardTrainer are documented here. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-06-13
+
+Two new modes — a metronome that listens to your timing, and a string-bending trainer — plus a structural change to how every drill is scoped and tracked.
+
+### Added
+- **Metronome.** A precise, in-app-synthesized click (beep or drum, with optional time signatures and an accented downbeat). Its experimental **"Detect my tempo"** layer listens to a USB/DI instrument as you play along and reports three things: your **tempo** (a robust live BPM from your plucks), your **timing** (early/late against the click, after a one-time calibration that measures and subtracts the detection latency), and your **consistency** (the spread of your beat intervals). Onsets are timestamped sub-frame off the audio clock, so the live BPM moves continuously instead of snapping to a few values. Every run of 8+ detected beats is recorded to History.
+- **Bending Trainer.** A timed drill (1 / 3 / 5 / 10 min) for bend intonation: the app names a note and a bend width — +1 or +2 semitones commonly, +3 occasionally, +4 rarely — and you find that note anywhere, play it, and bend up to the target. A live cents meter tracks the bend; the note you actually *reach and hold* is scored 0–100 on cents accuracy, so an overshoot-then-settle is judged at the settle. Optionally hear the two notes first — the classic way bends are taught. Per-drill and per-bend-width results are recorded to History.
+- **Practice zones — strings and fret sections.** Restrict any fretboard drill to a chosen set of strings and neck sections (0–7, 7–12, 12–19, 19–24), combinable. On the position-generating drills (Find the Note, Note on String, Open Strings) the restriction is enforced; on the pitch-class drills (Trainer, Intervals, Scale Degrees, Chord Builder) it is honor-system. Either way the zone is the label your History and adaptive difficulty partition by — so "4th & 5th · frets 7–12" builds its own profile. Persisted per exercise. This replaces the old freeform "training type" text field.
+- **History covers every mode.** One Mode picker now spans the note exercises plus **Tempo** (metronome detection runs) and **Bending** drills, each with its own Progress chart and table; Bending also gets a per-bend-width Mastery breakdown. The Adaptive-vs-Uniform distinction extends to per-item Mastery, with an All / Adaptive / Normal filter on both Progress and Mastery. The daily-practice total counts bending and metronome time too, not just note-exercise sessions.
+
+### Changed
+- **Find the Note always asks you to name the note** — the naming step is no longer optional, and the "Heard: X" readout is hidden in this mode (it would spell out the answer).
+- **The input-level meter is consistent** — shown whenever you are listening, in every mic-using mode.
+- **"Reset all practice history" now clears adaptive (SM-2) state too**, so a fresh start no longer keeps biasing toward your old weak notes. The reset also clears the new tempo and bending logs.
+- A single, consistent "Start Listening" prompt across modes.
+
+### Fixed
+- **Input could silently stop in some modes.** Starting a second audio engine — the metronome click, or the bending note preview — reconfigured the shared audio device and stopped the input tap while the app still showed "Listening", so notes quietly stopped registering. The input engine now rebuilds on an audio-configuration change, so listening survives the metronome/preview starting and audio-route changes (headphones, interfaces). The Tuner was unaffected because it never starts a second engine.
+- Numerous tempo-detection and bending data/GUI fixes from internal review: sub-frame onset precision for soft attacks, early-stop drill summaries, settings-persistence clobbers on launch, and audio-thread work gated to when it is actually needed.
+
 ## [1.4.0] - 2026-06-07
 
 A big release: History is rebuilt around per-item mastery, two new exercises join the lineup, and an experimental polyphonic chord detector lands.
